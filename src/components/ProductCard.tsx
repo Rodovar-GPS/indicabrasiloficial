@@ -7,7 +7,7 @@ import { cn } from '../lib/utils';
 import { doc, increment, updateDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
-export function ProductCard({ product }: { product: Product }) {
+export const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const { isFavorite, toggleFavorite } = useFavorites();
   const isFav = isFavorite(product.id);
   

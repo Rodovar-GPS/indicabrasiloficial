@@ -22,9 +22,6 @@ export function Admin() {
     image_url: '', affiliate_link: '', store_name: '', category: 'tecnologia', is_featured: false
   });
 
-  const [igUrl, setIgUrl] = useState('');
-  const [igLoading, setIgLoading] = useState(false);
-
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (!user || user.email !== 'indicabrasiloficiall@gmail.com') {
@@ -77,12 +74,21 @@ export function Admin() {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const parsedPrice = parseFloat(formData.price.replace(',', '.'));
+      const parsedOriginal = parseFloat(formData.original_price.replace(',', '.'));
+      const parsedDiscount = parseFloat(formData.discount_percent.replace(',', '.'));
+      
+      if (isNaN(parsedPrice)) {
+        alert("Erro: Preço inválido.");
+        return;
+      }
+
       const newProduct = {
         title: formData.title,
         description: formData.description,
-        price: parseFloat(formData.price),
-        original_price: parseFloat(formData.original_price) || 0,
-        discount_percent: parseFloat(formData.discount_percent) || 0,
+        price: parsedPrice,
+        original_price: isNaN(parsedOriginal) ? 0 : parsedOriginal,
+        discount_percent: isNaN(parsedDiscount) ? 0 : parsedDiscount,
         image_url: formData.image_url,
         affiliate_link: formData.affiliate_link,
         store_name: formData.store_name,
@@ -101,34 +107,10 @@ export function Admin() {
         image_url: '', affiliate_link: '', store_name: '', category: 'tecnologia', is_featured: false
       });
       alert("Produto adicionado com sucesso!");
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error adding product", err);
-      alert("Erro ao adicionar produto.");
+      alert("Erro ao adicionar produto: " + (err.message || String(err)));
     }
-  };
-
-  const simulateInstagramSync = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIgLoading(true);
-    // Simulate API delay
-    setTimeout(() => {
-      setFormData({
-        title: 'Produto Extraído Automático do Instagram',
-        description: 'Descrição capturada da legenda do post @indicabrasil.oficial...',
-        price: '199.90',
-        original_price: '299.90',
-        discount_percent: '33',
-        image_url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=400',
-        affiliate_link: 'https://amazon.com.br',
-        store_name: 'Amazon',
-        category: 'tecnologia',
-        is_featured: true
-      });
-      setIgLoading(false);
-      setActiveTab('produtos');
-      setIsAdding(true);
-      setIgUrl('');
-    }, 2000);
   };
 
   if (isAuthChecking) return <div className="min-h-screen bg-brand-bg flex items-center justify-center">Carregando...</div>;
@@ -170,13 +152,6 @@ export function Admin() {
             className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all ${activeTab === 'produtos' ? 'bg-white/10 text-white' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
           >
             <ShoppingBag className="w-5 h-5" /> Catálogo & Produtos
-          </button>
-
-          <button 
-            onClick={() => setActiveTab('instagram')}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all ${activeTab === 'instagram' ? 'bg-gradient-to-r from-pink-500 to-orange-400 text-white shadow-lg' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
-          >
-            <Instagram className="w-5 h-5" /> Captura Instagram
           </button>
         </nav>
         
@@ -284,15 +259,15 @@ export function Admin() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <div>
                       <label className="block text-sm font-bold mb-1.5 text-gray-700">Preço Atual (R$)</label>
-                      <input type="number" step="0.01" required value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3" />
+                      <input type="text" required value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3" placeholder="0,00" />
                     </div>
                     <div>
                       <label className="block text-sm font-bold mb-1.5 text-gray-700">Preço Original (R$)</label>
-                      <input type="number" step="0.01" value={formData.original_price} onChange={e => setFormData({...formData, original_price: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3" />
+                      <input type="text" value={formData.original_price} onChange={e => setFormData({...formData, original_price: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3" placeholder="0,00" />
                     </div>
                     <div>
                       <label className="block text-sm font-bold mb-1.5 text-gray-700">Desconto (%)</label>
-                      <input type="number" value={formData.discount_percent} onChange={e => setFormData({...formData, discount_percent: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 bg-gray-100" />
+                      <input type="text" value={formData.discount_percent} onChange={e => setFormData({...formData, discount_percent: e.target.value})} className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 bg-gray-100" placeholder="0" />
                     </div>
                   </div>
 
@@ -376,59 +351,6 @@ export function Admin() {
                 </table>
               </div>
             </div>
-          </div>
-        )}
-
-        {/* INSTAGRAM TAB */}
-        {activeTab === 'instagram' && (
-          <div className="animate-in fade-in slide-in-from-right-8 duration-500 max-w-3xl">
-            <h2 className="text-3xl font-black text-brand-blue mb-4">Captura Automática <span className="text-pink-500">Instagram</span></h2>
-            
-            <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-xl shadow-pink-500/5 relative overflow-hidden mb-8">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-pink-500/10 to-orange-400/10 rounded-bl-full pointer-events-none" />
-              
-              <div className="relative z-10">
-                <div className="flex items-center gap-4 mb-6 text-brand-blue font-bold">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-pink-500 to-orange-400 flex items-center justify-center text-white shadow-md">
-                    <DownloadCloud className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl">Importar Post @indicabrasil.oficial</h3>
-                    <p className="text-sm font-normal opacity-70">Cole o link (URL) da publicação para capturar dados.</p>
-                  </div>
-                </div>
-
-                <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-6 flex gap-3 text-sm text-orange-800 font-bold items-start">
-                  <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-                  <p>
-                    Aviso: A captura total automatizada requer permissões do Facebook Developer (Graph API). Como forma de demonstrar a utilidade do seu painel profissional, preparamos uma integração que preenche o formulário para você validar as fotos e os links antes de ir pro ar!
-                  </p>
-                </div>
-
-                <form onSubmit={simulateInstagramSync} className="flex gap-4">
-                  <input 
-                    type="url" 
-                    placeholder="Ex: https://www.instagram.com/p/Cxyz123/" 
-                    required
-                    value={igUrl}
-                    onChange={(e) => setIgUrl(e.target.value)}
-                    className="flex-1 bg-gray-50 border border-gray-200 focus:border-pink-500 outline-none rounded-xl px-5 py-4 font-bold"
-                  />
-                  <button 
-                    type="submit" 
-                    disabled={igLoading}
-                    className="bg-brand-blue hover:bg-brand-blue/90 text-white font-black px-8 rounded-xl transition-all shadow-md flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed min-w-[160px] justify-center"
-                  >
-                    {igLoading ? (
-                      <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    ) : (
-                      <>Capturar Dados</>
-                    )}
-                  </button>
-                </form>
-              </div>
-            </div>
-
           </div>
         )}
 
