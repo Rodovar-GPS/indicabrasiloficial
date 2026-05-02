@@ -17,6 +17,7 @@ const CATEGORIES = [
   { id: 'esporte', name: 'Esporte', emoji: '🏃' },
   { id: 'cozinha', name: 'Cozinha', emoji: '🍳' },
   { id: 'games', name: 'Games', emoji: '🎮' },
+  { id: 'produto-virtual', name: 'Produto Virtual', emoji: '💻' },
 ];
 
 export function Home() {

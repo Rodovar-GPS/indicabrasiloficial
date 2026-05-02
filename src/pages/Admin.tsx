@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { collection, query, getDocs, addDoc, updateDoc, deleteDoc, doc, orderBy, limit } from 'firebase/firestore';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router';
@@ -276,6 +276,7 @@ export function Admin() {
                         <option value="esporte">Esporte</option>
                         <option value="cozinha">Cozinha</option>
                         <option value="games">Games</option>
+                        <option value="produto-virtual">Produto Virtual</option>
                       </select>
                     </div>
                   </div>

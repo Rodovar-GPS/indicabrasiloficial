@@ -1,3 +1,4 @@
+import React from 'react';
 import { Heart } from 'lucide-react';
 import { Link } from 'react-router';
 import { useFavorites } from '../store/useFavorites';

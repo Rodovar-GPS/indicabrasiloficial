@@ -1,3 +1,5 @@
+import { Link } from 'react-router';
+
 export function Footer() {
   return (
     <footer className="mt-8 flex flex-col bg-white border-t border-[#EEE] items-center justify-center">
@@ -6,11 +8,11 @@ export function Footer() {
       </div>
       
       <div className="h-[98px] flex flex-col items-center justify-center w-full px-5 text-center">
-        <div className="flex gap-5 text-[11px] opacity-70 mb-2 font-bold">
-          <span>Privacidade</span>
-          <span>Termos de Uso</span>
-          <span>Anuncie Conosco</span>
-          <span>Contato</span>
+        <div className="flex gap-5 text-[11px] opacity-70 mb-2 font-bold select-none">
+          <Link to="/privacidade" className="hover:text-brand-blue hover:opacity-100 transition-colors">Privacidade</Link>
+          <Link to="/termos-de-uso" className="hover:text-brand-blue hover:opacity-100 transition-colors">Termos de Uso</Link>
+          <Link to="/anuncie-conosco" className="hover:text-brand-blue hover:opacity-100 transition-colors">Anuncie Conosco</Link>
+          <Link to="/contato" className="hover:text-brand-blue hover:opacity-100 transition-colors">Contato</Link>
         </div>
         
         <div className="text-[12px] font-bold text-brand-blue">

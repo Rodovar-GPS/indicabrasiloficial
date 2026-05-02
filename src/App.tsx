@@ -10,6 +10,10 @@ import { Admin } from './pages/Admin';
 import { Login } from './pages/Login';
 import { Promocoes } from './pages/Promocoes';
 import { Cupons } from './pages/Cupons';
+import { TermosUso } from './pages/TermosUso';
+import { Privacidade } from './pages/Privacidade';
+import { Contato } from './pages/Contato';
+import { AnuncieConosco } from './pages/AnuncieConosco';
 
 // WhatsApp Icon SVG Component
 function WhatsAppIcon() {
@@ -30,9 +34,13 @@ export default function App() {
         <Route path="/produto/:id" element={<ProductDetails />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/termos-de-uso" element={<TermosUso />} />
+        <Route path="/privacidade" element={<Privacidade />} />
+        <Route path="/contato" element={<Contato />} />
+        <Route path="/anuncie-conosco" element={<AnuncieConosco />} />
       </Routes>
       <a 
-        href="https://wa.me/5571982319773"
+        href="https://wa.me/5571982319773?text=Ol%C3%A1%20tudo%20bem%3F%20estou%20com%20duvida%2C%20pode%20me%20ajudar%3F"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-[80px] right-[20px] w-[60px] h-[60px] bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_8px_24px_rgba(37,211,102,0.4)] hover:scale-110 hover:shadow-[0_12px_32px_rgba(37,211,102,0.6)] transition-all duration-300 z-50 text-white animate-bounce-slow"

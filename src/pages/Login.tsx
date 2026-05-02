@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router';
 import { auth } from '../lib/firebase';
@@ -6,7 +6,7 @@ import { ShieldCheck } from 'lucide-react';
 
 export function Login() {
   const [email, setEmail] = useState('indicabrasiloficiall@gmail.com');
-  const [password, setPassword] = useState('Txhfpb6xcj@#280187');
+  const [password, setPassword] = useState('Txhfpb6xcj#@280187');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
