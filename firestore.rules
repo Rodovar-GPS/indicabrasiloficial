@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == 'indicabrasiloficiall@gmail.com';
+    }
+
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    function isValidProduct(data) {
+      return data.keys().hasAll(['title', 'price', 'image_url', 'affiliate_link', 'store_name', 'category', 'is_active', 'clicks', 'created_at']) &&
+             data.title is string && data.title.size() > 0 && data.title.size() <= 200 &&
+             data.price is number &&
+             data.image_url is string && data.image_url.size() <= 1000 &&
+             data.affiliate_link is string && data.affiliate_link.size() <= 1000 &&
+             data.store_name is string && data.store_name.size() <= 100 &&
+             data.category is string && data.category.size() <= 100 &&
+             data.is_active is bool &&
+             data.clicks is number &&
+             data.created_at is number;
+    }
+
+    match /products/{productId} {
+      allow get: if isValidId(productId);
+      allow list: if existing().is_active == true || isAdmin();
+      
+      allow create: if isValidId(productId) && isAdmin() && isValidProduct(incoming());
+      
+      allow update: if isValidId(productId) && (
+        isAdmin() ||
+        (incoming().diff(existing()).affectedKeys().hasOnly(['clicks']) && incoming().clicks is number)
+      );
+
+      allow delete: if isValidId(productId) && isAdmin();
+    }
+
+    match /categories/{categoryId} {
+      allow read: if isValidId(categoryId);
+      allow create, update, delete: if isValidId(categoryId) && isAdmin();
+    }
+  }
+}

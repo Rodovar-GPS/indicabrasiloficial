@@ -1,0 +1,50 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "An affiliate product",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "original_price": { "type": "number" },
+        "discount_percent": { "type": "number" },
+        "image_url": { "type": "string" },
+        "affiliate_link": { "type": "string" },
+        "store_name": { "type": "string" },
+        "category": { "type": "string" },
+        "tags": { "type": "array" },
+        "rating": { "type": "number" },
+        "rating_count": { "type": "number" },
+        "is_active": { "type": "boolean" },
+        "is_featured": { "type": "boolean" },
+        "clicks": { "type": "number" },
+        "created_at": { "type": "number" }
+      },
+      "required": ["title", "description", "price", "image_url", "affiliate_link", "store_name", "category", "is_active", "is_featured", "clicks", "created_at"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Product category",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "slug": { "type": "string" },
+        "emoji": { "type": "string" },
+        "is_active": { "type": "boolean" }
+      },
+      "required": ["name", "slug", "emoji", "is_active"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Products available"
+    },
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Product categories"
+    }
+  }
+}

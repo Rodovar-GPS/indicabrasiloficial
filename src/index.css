@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-title: 'Arial Narrow', sans-serif;
+  --font-body: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  --color-brand-green: #1B8C4E;
+  --color-brand-green-dark: #0F5C34;
+  --color-brand-yellow: #F5C300;
+  --color-brand-blue: #1B2A5E;
+  --color-brand-bg: #F7F7F5;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-brand-bg);
+  color: var(--color-brand-blue);
+  margin: 0;
+  padding: 0;
+}
+
+.heading-font {
+  font-family: var(--font-title);
+}
+
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(-5%); }
+  50% { transform: translateY(0); }
+}
+.animate-bounce-slow {
+  animation: bounce-slow 3s infinite;
+}
