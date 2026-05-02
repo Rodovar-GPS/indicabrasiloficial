@@ -17,24 +17,13 @@ export function Login() {
     setLoading(true);
 
     try {
-      // Try logging in
       await signInWithEmailAndPassword(auth, email, password);
       navigate('/admin');
     } catch (err: any) {
-      if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
-        // Automatically create if not exists
-        try {
-          await createUserWithEmailAndPassword(auth, email, password);
-          navigate('/admin');
-        } catch (createErr: any) {
-             if (createErr.code === 'auth/operation-not-allowed') {
-               setError('ERR: Ative Email/Password Auth no Firebase Console. Authentication -> Sign-in method -> Email/Password.');
-             } else {
-               setError(createErr.message);
-             }
-        }
+      if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        setError('E-mail ou senha incorretos.');
       } else if (err.code === 'auth/operation-not-allowed') {
-         setError('Atenção: Você precisa habilitar a autenticação por Email/Senha no painel do Firebase Console.');
+        setError('Atenção: Você precisa habilitar a autenticação por Email/Senha no painel do Firebase Console.');
       } else {
         setError(err.message);
       }
